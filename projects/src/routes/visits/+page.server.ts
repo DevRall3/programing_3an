@@ -12,12 +12,15 @@ export const load = (async ({ cookies }) => {
 
     if (id == undefined) {
         uniqueVisits++;
-        cookies.set('id', uniqueVisits.toString(), { path: '/' , 
-            httpOnly: false,
-            secure: false
+        cookies.set('id', uniqueVisits.toString(), { 
+            path: '/' , 
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            // expires: new Date(2024, 10, 27)
         })
         id = uniqueVisits.toString();
-    } 
+    }
 
     if (localVisits[id] == undefined) {
         localVisits[id] = 0;
