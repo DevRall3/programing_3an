@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>Home</title>
+</svelte:head>
+
 <main>
     <div class="mainbanner">
         <div id="navbar" class="navbar">

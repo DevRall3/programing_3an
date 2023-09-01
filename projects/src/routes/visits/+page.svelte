@@ -1,9 +1,24 @@
+<svelte:head>
+    <title>Visits</title>
+</svelte:head>
+
 <script>
+    import { browser } from "$app/environment";
+    import { onDestroy } from "svelte";
+
     export let data;
 
-    let globalTotalVisits = data.globalVisits;
-    let yourVisitOrder = data.id;
-    let yourVisitCount = data.yourVisits;
+    if (browser) {
+        let interval = setInterval(async () => {
+            let result = await fetch("/visits");
+            let json = await result.json();
+            data.globalVisits = json.globalVisits;
+        }, 1000);
+
+        onDestroy(() => {
+            clearInterval(interval);
+        });
+    }
 </script>
 
 <main>
@@ -14,9 +29,12 @@
         </div>
         <article>
             <h1>Visitor Statistics</h1>
-            <span>Global Visits: {globalTotalVisits}</span>
-            <span>Your Visits: {yourVisitCount}</span>
-            <span>Visit Order: {yourVisitOrder}</span>
+            <span>Total Global Visits: {data.globalVisits} <br>
+            <p>The amount of times the website has been visited globaly</p></span>
+            <span>Your Total Visits: {data.yourVisits} <br>
+            <p>The amount of times you have visited the website</p></span>
+            <span>Visit Order: {data.id} <br>
+            <p>Higher number, newer visitor</p></span>
         </article>
     </div>
 </main>
@@ -31,6 +49,7 @@
         height: 100vh;
         width: 100vw;
         background: url("./visitmainbanner.jpg");
+        /* url("./visitmainbanner.jpg") */
         background-size: cover;
         background-position: center;
     }
@@ -41,6 +60,8 @@
         top: 0; /* Stay on top */
         width: 100%; /* Full width */
         transition: top 0.3s; /* Transition effect when sliding down (and up) */
+
+        box-shadow: 0px 1px 10px 6px rgba(0, 0, 0, 0.35);
     }
 
     /* Style the navbar links */
@@ -68,7 +89,7 @@
         flex-direction: column;
         gap: 2rem;
         margin: auto;
-        margin-top: 250px;
+        margin-top: 200px;
         background: rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(15px);
         width: fit-content;
@@ -78,19 +99,24 @@
         font-weight: bold;
 
         animation: fadeInAnimation ease-in 1s;
-        animation-delay: .8s;
+        animation-delay: 0.8s;
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
+    }
+
+    article p {
+        font-size: 14px;
+        font-weight: 500;
     }
 
     @keyframes fadeInAnimation {
         0% {
             opacity: 0;
-            margin-top: 270px;
+            margin-top: 220px;
         }
         100% {
             opacity: 1;
-            margin-top: 250px;
+            margin-top: 200px;
         }
     }
 </style>

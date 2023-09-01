@@ -1,11 +1,11 @@
 import type { PageServerLoad } from "./$types";
 
-let globalVisits = 0;
+export let _globalVisits = 0;
 let uniqueVisits = 0;
 let localVisits: Record<string,number> = {};
 
 export const load = (async ({ cookies }) => {
-    globalVisits++;
+    _globalVisits++;
 
     // Cookie - Håll reda på om användaren har besökt hemsidan tidigare
     let id = cookies.get('id')
@@ -27,5 +27,5 @@ export const load = (async ({ cookies }) => {
     }
     localVisits[id]++;
 
-    return {globalVisits, id, yourVisits: localVisits[id]};
+    return {globalVisits: _globalVisits, id, yourVisits: localVisits[id]};
 }) satisfies PageServerLoad;
